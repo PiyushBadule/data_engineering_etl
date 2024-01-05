@@ -6,28 +6,32 @@ This project implements a Data Engineering pipeline for processing housing data,
 ## Project Structure
 
 ```
-data_engineering_project/
+DataEngineeringProject/
 │
-├── data/
-│   └── housing.csv          # Your data file
+├── data/             # Contains the datasets used in the project.
+│ └── housing.csv
 │
-├── models/
-│   └── model.joblib         # Your trained model file
+├── logs/             # Log files for monitoring the application's behavior.
+│ └── project.log
 │
-├── src/
-│   ├── __init__.py
-│   ├── database.py          # Functions for database operations
-│   ├── model.py             # Functions for model training and prediction
-│   ├── etl.py               # ETL (Extract, Transform, Load) pipeline functions
-│   └── predictor.py         # Script for making predictions with user input
+├── models/           # Trained machine learning model files.
+│ └── model.joblib
 │
-├── tests/
-│   ├── test_database.py     # Test cases for database operations
-│   ├── test_model.py        # Test cases for model functionalities
-│   ├── test_etl.py          # Test cases for ETL processes
-│   └── test_predictor.py    # Test cases for the prediction script
+├── src/              # Source code for the project's modules.
+│ ├── database.py     # Handles database operations.
+│ ├── etl.py          # Manages the Extract, Transform, Load process.
+│ ├── model.py        # Handles machine learning model operations.
+│ └── predictor.py    # Performs predictions using the trained model.
 │
-└── main.py                  # Main script to run the ETL pipeline or make predictions
+├── tests/            # Test cases for ensuring module reliability.
+│ ├── test_database.py
+│ ├── test_etl.py
+│ ├── test_model.py
+│ └── test_predictor.py
+│
+├── requirements.txt   # Required Python packages for the project.
+├── logger_config.py   # Configuration for logging.
+└── main.py            # The main script to run the entire pipeline.
 ```
 
 ### Components
@@ -55,3 +59,6 @@ data_engineering_project/
 
 3. **Running Tests**:
    - Execute `python -m unittest discover -s tests` to run the test cases.
+  
+4. **Logging**:
+   - Check the /logs/project.log file for detailed logs of the application's execution, useful for debugging and monitoring.
