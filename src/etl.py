@@ -1,57 +1,57 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
+import logging
+from logger_config import setup_logger
+from typing import Tuple, Optional
 
-from data_engineering_etl.src.database import save_to_database
+# Initialize the logger
+setup_logger()
 
-RANDOM_STATE = 100
-
-
-def prepare_data(input_data_path, conn):
+class ETLProcessor:
     """
-    Processes the housing data from a given CSV file and saves the transformed data to the database.
-    The function also performs a train-test split on the data.
+    A class to handle the Extract, Transform, Load (ETL) process for data preparation.
 
-    :param input_data_path: Path to the CSV file containing housing data.
-    :param conn: Database connection object.
-    :return: Tuple containing split data (X_train, X_test, y_train, y_test).
+    Attributes:
+        data_path (str): The file path to the dataset.
     """
-    try:
-        df = pd.read_csv(input_data_path)
-        df = df.dropna()
 
-        for col in df.columns[df.dtypes == 'O']:
-            df.drop(df[df[col] == 'Null'].index, inplace=True)
+    def __init__(self, data_path: str):
+        """
+        Initializes the ETLProcessor with the specified data path.
 
-        df_features = df.drop(['MEDIAN_HOUSE_VALUE', 'AGENCY'], axis=1)
-        y = df['MEDIAN_HOUSE_VALUE'].values
+        Args:
+            data_path (str): The file path to the dataset.
+        """
+        self.data_path = data_path
 
-        df_features = pd.get_dummies(df_features, columns=['OCEAN_PROXIMITY'])
+    def prepare_data(self, test_size: float = 0.2, random_state: Optional[int] = None) -> Tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series]:
+        """
+        Prepares the data for modeling by performing extraction, transformation, and splitting.
 
-        filtered_columns = ['LONGITUDE', 'LAT', 'MEDIAN_AGE', 'ROOMS', 'BEDROOMS', 'POP',
-                            'HOUSEHOLDS', 'MEDIAN_INCOME', 'OCEAN_PROXIMITY_<1H OCEAN',
-                            'OCEAN_PROXIMITY_INLAND', 'OCEAN_PROXIMITY_ISLAND',
-                            'OCEAN_PROXIMITY_NEAR BAY', 'OCEAN_PROXIMITY_NEAR OCEAN']
-        df_features = df_features.loc[:, filtered_columns]
+        Args:
+            test_size (float): The proportion of the dataset to include in the test split.
+            random_state (int, optional): The seed used by the random number generator.
 
-        column_mapping = {'LONGITUDE': 'longitude',
-                          'LAT': 'latitude',
-                          'MEDIAN_AGE': 'housing_median_age',
-                          'ROOMS': 'total_rooms',
-                          'BEDROOMS': 'total_bedrooms',
-                          'POP': 'population',
-                          'HOUSEHOLDS': 'households',
-                          'MEDIAN_INCOME': 'median_income',
-                          'OCEAN_PROXIMITY_<1H OCEAN': 'ocean_proximity_<1H OCEAN',
-                          'OCEAN_PROXIMITY_INLAND': 'ocean_proximity_INLAND',
-                          'OCEAN_PROXIMITY_ISLAND': 'ocean_proximity_ISLAND',
-                          'OCEAN_PROXIMITY_NEAR BAY': 'ocean_proximity_NEAR BAY',
-                          'OCEAN_PROXIMITY_NEAR OCEAN': 'ocean_proximity_NEAR OCEAN'}
-        df_features.rename(columns=column_mapping, inplace=True)
+        Returns:
+            Tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series]: A tuple containing split data (X_train, X_test, y_train, y_test).
+        """
+        try:
+            # Read the data
+            df = pd.read_csv(self.data_path)
 
-        save_to_database(df_features, conn)
+            # Implement data cleaning and processing here
+            # Example: df = df.dropna()
 
-        X_train, X_test, y_train, y_test = train_test_split(df_features, y, test_size=0.2, random_state=RANDOM_STATE)
-        return (X_train, X_test, y_train, y_test)
+            # Assuming 'Target' is the column you want to predict
+            X = df.drop(columns=['Target'])
+            y = df['Target']
 
-    except Exception as e:
-        raise Exception(f"Error in data preparation: {e}")
+            # Split the data
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=random_state)
+
+            logging.info("Data preparation completed successfully.")
+            return X_train, X_test, y_train, y_test
+        except Exception as e:
+            logging.error(f"Error preparing data: {e}")
+            # Return None in case of an error
+            return None, None, None, None
