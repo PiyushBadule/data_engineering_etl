@@ -1,5 +1,5 @@
 import pandas as pd
-from model import Model  # Make sure this path is correct based on your project structure
+from model import Model  # Adjust the import path as needed
 import logging
 from logger_config import setup_logger
 from typing import Any, Optional
@@ -26,8 +26,7 @@ class Predictor:
 
     def prepare_input_data(self, input_data: Any) -> Optional[pd.DataFrame]:
         """
-        Prepares the input data for prediction. This method should be implemented to match the preprocessing
-        that was done during model training.
+        Prepares the input data for prediction. Implement this method based on your data preprocessing needs.
 
         Args:
             input_data (Any): The raw data to be processed into a format suitable for the model.
@@ -36,10 +35,13 @@ class Predictor:
             Optional[pd.DataFrame]: A DataFrame containing the processed data, or None if an error occurs.
         """
         try:
-            # Implement input data preparation here
+            # Implement input data preparation here.
+            # This is a placeholder; replace it with your actual preprocessing logic.
             # Example: input_df = pd.DataFrame([input_data])
+            input_df = pd.DataFrame([input_data])  # Modify this as per your preprocessing steps
+
             logging.info("Input data prepared for prediction.")
-            return input_df  # Ensure this variable is defined based on your preprocessing logic
+            return input_df
         except Exception as e:
             logging.error(f"Error preparing input data: {e}")
             return None
