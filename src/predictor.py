@@ -1,110 +1,68 @@
-import logging
-
 import pandas as pd
+from model import Model  # Make sure this path is correct based on your project structure
+import logging
+from logger_config import setup_logger
+from typing import Any, Optional
 
-from data_engineering_etl.src.database import save_predictions_to_database
-from data_engineering_etl.src.model import load_model, predict
+# Initialize the logger
+setup_logger()
 
-
-def given_input_data():
+class Predictor:
     """
-    Creates a set of test input data for prediction.
+    A class responsible for making predictions using a pre-trained machine learning model.
 
-    :return: A tuple of dictionaries, each representing a test data instance.
+    Attributes:
+        model (Model): An instance of a pre-trained machine learning model.
     """
 
-    data_1 = {
-        'longitude': -122.64,
-        'latitude': 38.01,
-        'housing_median_age': 36.0,
-        'total_rooms': 1336.0,
-        'total_bedrooms': 258.0,
-        'population': 678.0,
-        'households': 249.0,
-        'median_income': 5.5789,
-        'ocean_proximity': 'NEAR OCEAN',
-    }
+    def __init__(self, model: Model):
+        """
+        Initializes the Predictor with a pre-trained model.
 
-    data_2 = {
-        'longitude': -115.73,
-        'latitude': 33.35,
-        'housing_median_age': 23.0,
-        'total_rooms': 1586.0,
-        'total_bedrooms': 448.0,
-        'population': 338.0,
-        'households': 182.0,
-        'median_income': 1.2132,
-        'ocean_proximity': 'INLAND',
-    }
+        Args:
+            model (Model): A pre-trained machine learning model.
+        """
+        self.model = model
 
-    data_3 = {
-        'longitude': -117.96,
-        'latitude': 33.89,
-        'housing_median_age': 24.0,
-        'total_rooms': 1332.0,
-        'total_bedrooms': 252.0,
-        'population': 625.0,
-        'households': 230.0,
-        'median_income': 4.4375,
-        'ocean_proximity': '<1H OCEAN',
-    }
+    def prepare_input_data(self, input_data: Any) -> Optional[pd.DataFrame]:
+        """
+        Prepares the input data for prediction. This method should be implemented to match the preprocessing
+        that was done during model training.
 
-    return data_1, data_2, data_3
+        Args:
+            input_data (Any): The raw data to be processed into a format suitable for the model.
 
+        Returns:
+            Optional[pd.DataFrame]: A DataFrame containing the processed data, or None if an error occurs.
+        """
+        try:
+            # Implement input data preparation here
+            # Example: input_df = pd.DataFrame([input_data])
+            logging.info("Input data prepared for prediction.")
+            return input_df  # Ensure this variable is defined based on your preprocessing logic
+        except Exception as e:
+            logging.error(f"Error preparing input data: {e}")
+            return None
 
-def prepare_input_data(input_data):
-    """
-    Prepares a single instance of input data for prediction, including one-hot encoding and ensuring all expected
-    columns are present.
+    def run_prediction(self, input_data: Any) -> Optional[Any]:
+        """
+        Runs the model's prediction on the prepared input data.
 
-    :param input_data: A dictionary containing the input data.
-    :return: A DataFrame ready for prediction.
-    """
-    try:
-        input_df = pd.DataFrame([input_data])
-        input_df = pd.get_dummies(input_df)
+        Args:
+            input_data (Any): The raw data to make predictions on.
 
-        expected_columns = ['longitude', 'latitude', 'housing_median_age', 'total_rooms',
-                            'total_bedrooms', 'population', 'households', 'median_income',
-                            'ocean_proximity_<1H OCEAN', 'ocean_proximity_INLAND',
-                            'ocean_proximity_ISLAND', 'ocean_proximity_NEAR BAY',
-                            'ocean_proximity_NEAR OCEAN']
-
-        for col in expected_columns:
-            if col not in input_df.columns:
-                input_df[col] = 0
-
-        input_df = input_df[expected_columns]
-        return input_df
-    except Exception as e:
-        logging.error(f"Error in preparing input data: {e}")
-        raise
-
-
-def run_prediction(MODEL_NAME, conn):
-    """
-    Runs predictions on a set of test data, logs the results, and saves predictions to the database.
-
-    :param MODEL_NAME: Path to the trained model file.
-    :param conn: Database connection object.
-    """
-    try:
-        model = load_model(MODEL_NAME)
-        input_data = given_input_data()
-
-        all_predictions = []
-
-        logging.info('Performing predictions...')
-        for data in input_data:
-            predicts_value = predict(prepare_input_data(data), model)
-            logging.info(f'Predicted Value: {predicts_value}')
-            predictions_df = pd.DataFrame(predicts_value, columns=['Predicted_Value'])
-            save_predictions_to_database(predictions_df, conn)
-
-            all_predictions.append(f'Predicted Value: {predicts_value}')  # Append each prediction to the list
-
-        return all_predictions  # Return the list of all prediction DataFrames
-
-    except Exception as e:
-        logging.error(f"Error during prediction: {e}")
-        raise
+        Returns:
+            Optional[Any]: The predictions made by the model, or None if an error occurs.
+        """
+        try:
+            prepared_data = self.prepare_input_data(input_data)
+            if prepared_data is not None:
+                predictions = self.model.predict(prepared_data)
+                logging.info("Predictions made successfully.")
+                return predictions
+            else:
+                logging.error("Prepared data is None, prediction aborted.")
+                return None
+        except Exception as e:
+            logging.error(f"Error during prediction: {e}")
+            return None
