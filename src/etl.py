@@ -24,7 +24,7 @@ class ETLProcessor:
         """
         self.data_path = data_path
 
-    def prepare_data(self, test_size: float = 0.2, random_state: Optional[int] = None) -> Tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series]:
+    def prepare_data(self, test_size: float = 0.2, random_state: Optional[int] = 100) -> Tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series]:
         """
         Prepares the data for modeling by performing extraction, transformation, and splitting.
 
