@@ -1,59 +1,93 @@
 import joblib
 from sklearn.ensemble import RandomForestRegressor
+import logging
+from logger_config import setup_logger
+from typing import Any, Optional
 
+# Initialize the logger
+setup_logger()
 
-def train(X_train, y_train):
+class Model:
     """
-    Train a RandomForestRegressor model on the provided training data.
+    A class representing a machine learning model for training and prediction.
 
-    :param X_train: Features of the training data.
-    :param y_train: Target variable of the training data.
-    :return: Trained RandomForestRegressor model.
+    Attributes:
+        model_path (str): The file path for saving or loading the model.
+        model (RandomForestRegressor or Any): The loaded or trained machine learning model.
     """
-    try:
-        regr = RandomForestRegressor(max_depth=12)
-        regr.fit(X_train, y_train)
-        return regr
-    except Exception as e:
-        raise ValueError(f"Training failed: {e}")
 
+    def __init__(self, model_path: str):
+        """
+        Initializes the Model with the specified path.
 
-def predict(X, model):
-    """
-    Make predictions using the provided model on the given data.
+        Args:
+            model_path (str): The file path for saving or loading the model.
+        """
+        self.model_path = model_path
+        self.model = self.load_model()
 
-    :param X: Data on which predictions are to be made.
-    :param model: Trained machine learning model.
-    :return: Predictions made by the model.
-    """
-    try:
-        return model.predict(X)
-    except Exception as e:
-        raise ValueError(f"Prediction failed: {e}")
+    def train(self, X_train: Any, y_train: Any) -> Optional[RandomForestRegressor]:
+        """
+        Trains the RandomForestRegressor model using the provided training data.
 
+        Args:
+            X_train (Any): The feature set for training.
+            y_train (Any): The target values for training.
 
-def save_model(model, filename):
-    """
-    Save the given machine learning model to a file.
+        Returns:
+            RandomForestRegressor or None: The trained RandomForestRegressor model or None if training fails.
+        """
+        try:
+            regr = RandomForestRegressor(max_depth=12)
+            regr.fit(X_train, y_train)
+            logging.info("Model training completed successfully.")
+            return regr
+        except Exception as e:
+            logging.error(f"Error during model training: {e}")
+            return None
 
-    :param model: Machine learning model to be saved.
-    :param filename: Path where the model will be saved.
-    """
-    try:
-        with open(filename, 'wb') as file:
-            joblib.dump(model, file, compress=3)
-    except Exception as e:
-        raise IOError(f"Failed to save model: {e}")
+    def predict(self, X: Any) -> Optional[Any]:
+        """
+        Makes predictions using the trained model on the provided data.
 
+        Args:
+            X (Any): The data to make predictions on.
 
-def load_model(filename):
-    """
-    Load a machine learning model from the specified file.
+        Returns:
+            Any or None: The predicted values or None if prediction fails.
+        """
+        try:
+            predictions = self.model.predict(X)
+            logging.info("Predictions made successfully.")
+            return predictions
+        except Exception as e:
+            logging.error(f"Error during prediction: {e}")
+            return None
 
-    :param filename: Path to the file containing the saved model.
-    :return: Loaded machine learning model.
-    """
-    try:
-        return joblib.load(filename)
-    except Exception as e:
-        raise IOError(f"Failed to load model: {e}")
+    def save_model(self, model: RandomForestRegressor) -> None:
+        """
+        Saves the provided model to the specified file path.
+
+        Args:
+            model (RandomForestRegressor): The model to be saved.
+        """
+        try:
+            joblib.dump(model, self.model_path, compress=3)
+            logging.info(f"Model saved to {self.model_path} successfully.")
+        except Exception as e:
+            logging.error(f"Error saving model: {e}")
+
+    def load_model(self) -> Optional[RandomForestRegressor]:
+        """
+        Loads a RandomForestRegressor model from the specified file path.
+
+        Returns:
+            RandomForestRegressor or None: The loaded RandomForestRegressor model or None if loading fails.
+        """
+        try:
+            model = joblib.load(self.model_path)
+            logging.info(f"Model loaded from {self.model_path} successfully.")
+            return model
+        except Exception as e:
+            logging.error(f"Error loading model: {e}")
+            return None
