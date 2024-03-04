@@ -1,57 +1,53 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
-import logging
-from logger_config import setup_logger
-from typing import Tuple, Optional
+from constants import RANDOM_STATE, TEST_SIZE, FILTERED_COLUMNS, DROP_COLUMN, COLUMN_MAPPING
+from src.database import DatabaseHandler
 
-# Initialize the logger
-setup_logger()
-
-class ETLProcessor:
+class DataProcessor:
     """
-    A class to handle the Extract, Transform, Load (ETL) process for data preparation.
-
-    Attributes:
-        data_path (str): The file path to the dataset.
+    Class for processing housing data and preparing it for training.
     """
 
-    def __init__(self, data_path: str):
+    def prepare_data(self, input_data_path):
         """
-        Initializes the ETLProcessor with the specified data path.
+        Processes the housing data from a given CSV file and saves the transformed data to the database.
+        The function also performs a train-test split on the data.
 
-        Args:
-            data_path (str): The file path to the dataset.
-        """
-        self.data_path = data_path
-
-    def prepare_data(self, test_size: float = 0.2, random_state: Optional[int] = 100) -> Tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series]:
-        """
-        Prepares the data for modeling by performing extraction, transformation, and splitting.
-
-        Args:
-            test_size (float): The proportion of the dataset to include in the test split.
-            random_state (int, optional): The seed used by the random number generator.
-
-        Returns:
-            Tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series]: A tuple containing split data (X_train, X_test, y_train, y_test).
+        :param input_data_path: Path to the CSV file containing housing data.
+        :return: Tuple containing split data (X_train, X_test, y_train, y_test).
         """
         try:
-            # Read the data
-            df = pd.read_csv(self.data_path)
+            # Read the data from CSV
+            df = pd.read_csv(input_data_path)
+            # Drop rows with NaN values
+            df = df.dropna()
 
-            # Implement data cleaning and processing here
-            # Example: df = df.dropna()
+            # Drop rows with 'Null' values in categorical columns
+            for col in df.columns[df.dtypes == 'O']:
+                df.drop(df[df[col] == 'Null'].index, inplace=True)
 
-            # Assuming 'Target' is the column you want to predict
-            X = df.drop(columns=['Target'])
-            y = df['Target']
+            # Separate features and target variable
+            df_features = df.drop(DROP_COLUMN, axis=1)
+            y = df['MEDIAN_HOUSE_VALUE'].values
 
-            # Split the data
-            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=random_state)
+            # One-hot encode categorical features
+            df_features = pd.get_dummies(df_features, columns=['OCEAN_PROXIMITY'])
 
-            logging.info("Data preparation completed successfully.")
+            # Filter relevant columns
+            filtered_columns = FILTERED_COLUMNS
+            df_features = df_features.loc[:, filtered_columns]
+
+            # Rename columns for consistency
+            column_mapping = COLUMN_MAPPING
+            df_features.rename(columns=column_mapping, inplace=True)
+
+            # Save transformed data to the database
+            DatabaseHandler().save_to_database(df_features)
+
+            # Perform train-test split
+            X_train, X_test, y_train, y_test = train_test_split(df_features, y, test_size=TEST_SIZE,
+                                                                random_state=RANDOM_STATE)
             return X_train, X_test, y_train, y_test
+
         except Exception as e:
-            logging.error(f"Error preparing data: {e}")
-            # Return None in case of an error
-            return None, None, None, None
+            raise Exception(f"Error in data preparation: {e}")
