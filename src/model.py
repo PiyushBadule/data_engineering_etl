@@ -1,6 +1,7 @@
 import joblib
 from sklearn.ensemble import RandomForestRegressor
 
+
 class ModelHandler:
     """
     Class to handle machine learning model operations.
