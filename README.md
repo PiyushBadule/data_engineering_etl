@@ -6,32 +6,33 @@ This project implements a Data Engineering pipeline for processing housing data,
 ## Project Structure
 
 ```
-DataEngineeringProject/
+data_engineering_project/
 │
-├── data/             # Contains the datasets used in the project.
-│ └── housing.csv
+├── data/
+│   └── housing.csv          # Your data file
 │
-├── logs/             # Log files for monitoring the application's behavior.
-│ └── project.log
+├── logs/
+│   └── logs.csv             # Your logs file
 │
-├── models/           # Trained machine learning model files.
-│ └── model.joblib
+├── models/
+│   └── model.joblib         # Your trained model file
 │
-├── src/              # Source code for the project's modules.
-│ ├── database.py     # Handles database operations.
-│ ├── etl.py          # Manages the Extract, Transform, Load process.
-│ ├── model.py        # Handles machine learning model operations.
-│ └── predictor.py    # Performs predictions using the trained model.
+├── src/
+│   ├── __init__.py
+│   ├── database.py          # Functions for database operations
+│   ├── model.py             # Functions for model training and prediction
+│   ├── etl.py               # ETL (Extract, Transform, Load) pipeline functions
+│   └── predictor.py         # Script for making predictions with user input
 │
-├── tests/            # Test cases for ensuring module reliability.
-│ ├── test_database.py
-│ ├── test_etl.py
-│ ├── test_model.py
-│ └── test_predictor.py
+├── tests/
+│   ├── test_database.py     # Test cases for database operations
+│   ├── test_model.py        # Test cases for model functionalities
+│   ├── test_etl.py          # Test cases for ETL processes
+│   └── test_predictor.py    # Test cases for the prediction script
 │
-├── requirements.txt   # Required Python packages for the project.
-├── logger_config.py   # Configuration for logging.
-└── main.py            # The main script to run the entire pipeline.
+├── constants.py             # All Constants of the Projects
+│
+└── main.py                  # Main script to run the ETL pipeline or make predictions
 ```
 
 ### Components
@@ -59,6 +60,3 @@ DataEngineeringProject/
 
 3. **Running Tests**:
    - Execute `python -m unittest discover -s tests` to run the test cases.
-  
-4. **Logging**:
-   - Check the /logs/project.log file for detailed logs of the application's execution, useful for debugging and monitoring.
