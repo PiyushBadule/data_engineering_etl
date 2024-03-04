@@ -1,0 +1,90 @@
+2024-03-04 14:06:22,514 - INFO - Loading the model...
+2024-03-04 14:06:22,673 - INFO - Calculating train dataset predictions...
+2024-03-04 14:06:22,949 - INFO - Evaluating the model...
+2024-03-04 14:06:22,951 - INFO - Train error: 25953.107237730303
+2024-03-04 14:06:22,952 - INFO - Test error: 25941.37078674827
+2024-03-04 14:06:22,952 - INFO - Performing predictions...
+2024-03-04 14:06:23,280 - INFO -    Predicted_Value
+0    384728.480812
+1    390014.428016
+2    332833.881809
+3    252141.209448
+4    229349.749125
+2024-03-04 14:06:23,427 - INFO - Performing predictions...
+2024-03-04 14:06:23,435 - INFO - Predicted Value: [320201.58554044]
+2024-03-04 14:06:23,451 - INFO - Predicted Value: [58815.45033765]
+2024-03-04 14:06:23,475 - INFO - Predicted Value: [192575.77355635]
+2024-03-04 14:06:23,485 - INFO - ['Predicted Value: [320201.58554044]', 'Predicted Value: [58815.45033765]', 'Predicted Value: [192575.77355635]']
+2024-03-04 14:06:23,485 - INFO - Closing database connection.
+2024-03-04 14:07:05,527 - INFO - Loading the model...
+2024-03-04 14:07:05,621 - INFO - Calculating train dataset predictions...
+2024-03-04 14:07:05,918 - INFO - Evaluating the model...
+2024-03-04 14:07:05,922 - INFO - Train error: 25953.107237730303
+2024-03-04 14:07:05,922 - INFO - Test error: 25941.37078674827
+2024-03-04 14:07:05,922 - INFO - Performing predictions...
+2024-03-04 14:07:06,259 - INFO -    Predicted_Value
+0    384728.480812
+1    390014.428016
+2    332833.881809
+3    252141.209448
+4    229349.749125
+2024-03-04 14:07:06,377 - INFO - Performing predictions...
+2024-03-04 14:07:06,385 - INFO - Predicted Value: [320201.58554044]
+2024-03-04 14:07:06,407 - INFO - Predicted Value: [58815.45033765]
+2024-03-04 14:07:06,424 - INFO - Predicted Value: [192575.77355635]
+2024-03-04 14:07:06,434 - INFO - ['Predicted Value: [320201.58554044]', 'Predicted Value: [58815.45033765]', 'Predicted Value: [192575.77355635]']
+2024-03-04 14:07:06,435 - INFO - Closing database connection.
+2024-03-04 14:07:48,776 - INFO - Loading the model...
+2024-03-04 14:07:48,873 - INFO - Calculating train dataset predictions...
+2024-03-04 14:07:49,143 - INFO - Evaluating the model...
+2024-03-04 14:07:49,146 - INFO - Train error: 25953.107237730303
+2024-03-04 14:07:49,146 - INFO - Test error: 25941.37078674827
+2024-03-04 14:07:49,146 - INFO - Performing predictions...
+2024-03-04 14:07:49,516 - INFO -    Predicted_Value
+0    384728.480812
+1    390014.428016
+2    332833.881809
+3    252141.209448
+4    229349.749125
+2024-03-04 14:07:49,630 - INFO - Performing predictions...
+2024-03-04 14:07:49,638 - INFO - Predicted Value: [320201.58554044]
+2024-03-04 14:07:49,658 - INFO - Predicted Value: [58815.45033765]
+2024-03-04 14:07:49,674 - INFO - Predicted Value: [192575.77355635]
+2024-03-04 14:07:49,683 - INFO - ['Predicted Value: [320201.58554044]', 'Predicted Value: [58815.45033765]', 'Predicted Value: [192575.77355635]']
+2024-03-04 14:07:49,683 - INFO - Closing database connection.
+2024-03-04 14:08:39,944 - INFO - Loading the model...
+2024-03-04 14:08:40,049 - INFO - Calculating train dataset predictions...
+2024-03-04 14:08:40,299 - INFO - Evaluating the model...
+2024-03-04 14:08:40,302 - INFO - Train error: 25953.107237730303
+2024-03-04 14:08:40,302 - INFO - Test error: 25941.37078674827
+2024-03-04 14:08:40,302 - INFO - Performing predictions...
+2024-03-04 14:08:40,626 - INFO -    Predicted_Value
+0    384728.480812
+1    390014.428016
+2    332833.881809
+3    252141.209448
+4    229349.749125
+2024-03-04 14:08:40,739 - INFO - Performing predictions...
+2024-03-04 14:08:40,747 - INFO - Predicted Value: [320201.58554044]
+2024-03-04 14:08:40,764 - INFO - Predicted Value: [58815.45033765]
+2024-03-04 14:08:40,780 - INFO - Predicted Value: [192575.77355635]
+2024-03-04 14:08:40,789 - INFO - ['Predicted Value: [320201.58554044]', 'Predicted Value: [58815.45033765]', 'Predicted Value: [192575.77355635]']
+2024-03-04 14:08:40,789 - INFO - Closing database connection.
+2024-03-04 14:09:56,549 - INFO - Loading the model...
+2024-03-04 14:09:56,675 - INFO - Calculating train dataset predictions...
+2024-03-04 14:09:56,932 - INFO - Evaluating the model...
+2024-03-04 14:09:56,935 - INFO - Train error: 25953.107237730303
+2024-03-04 14:09:56,935 - INFO - Test error: 25941.37078674827
+2024-03-04 14:09:56,935 - INFO - Performing predictions...
+2024-03-04 14:09:57,253 - INFO -    Predicted_Value
+0    384728.480812
+1    390014.428016
+2    332833.881809
+3    252141.209448
+4    229349.749125
+2024-03-04 14:09:57,414 - INFO - Performing predictions...
+2024-03-04 14:09:57,423 - INFO - Predicted Value: [320201.58554044]
+2024-03-04 14:09:57,438 - INFO - Predicted Value: [58815.45033765]
+2024-03-04 14:09:57,455 - INFO - Predicted Value: [192575.77355635]
+2024-03-04 14:09:57,466 - INFO - ['Predicted Value: [320201.58554044]', 'Predicted Value: [58815.45033765]', 'Predicted Value: [192575.77355635]']
+2024-03-04 14:09:57,467 - INFO - Closing database connection.
