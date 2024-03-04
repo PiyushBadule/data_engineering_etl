@@ -1,5 +1,7 @@
 import logging
+
 import pandas as pd
+
 from constants import EXPECTED_COLUMN
 from src.database import DatabaseHandler
 from src.model import ModelHandler
