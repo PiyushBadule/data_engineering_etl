@@ -1,7 +1,9 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
+
 from constants import RANDOM_STATE, TEST_SIZE, FILTERED_COLUMNS, DROP_COLUMN, COLUMN_MAPPING
 from src.database import DatabaseHandler
+
 
 class DataProcessor:
     """
