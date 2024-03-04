@@ -1,6 +1,9 @@
 import sqlite3
+
 import pandas as pd
+
 from constants import DATABASE_NAME
+
 
 class DatabaseHandler:
     """
