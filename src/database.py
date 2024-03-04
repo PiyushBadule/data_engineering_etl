@@ -1,73 +1,65 @@
 import sqlite3
 import pandas as pd
-import logging
-from logger_config import setup_logger
+from constants import DATABASE_NAME
 
-# Initialize the logger
-setup_logger()
-
-class DatabaseManager:
+class DatabaseHandler:
     """
-    A class to manage database connections and operations.
-
-    Attributes:
-        database_name (str): The name or path of the database.
-        connection (sqlite3.Connection): A SQLite database connection.
+    Class to handle interactions with a SQLite database.
     """
-    
-    def __init__(self, database_name: str):
+
+    def __init__(self, database_name=DATABASE_NAME):
         """
-        Initializes the DatabaseManager with the specified database.
+        Initialize DatabaseHandler object.
 
-        Args:
-            database_name (str): The name or path of the database to connect to.
+        :param database_name: Name of the SQLite database.
         """
         self.database_name = database_name
-        self.connection = self.create_connection()
+        self.connection = self.create_database()
 
-    def create_connection(self):
+    def create_database(self):
         """
-        Creates and returns a connection to the database.
+        Creates a connection to the SQLite database.
 
-        Returns:
-            sqlite3.Connection: A connection object to the SQLite database.
+        :return: SQLite connection object.
         """
         try:
             conn = sqlite3.connect(self.database_name)
-            logging.info(f"Database connected: {self.database_name}")
             return conn
-        except Exception as e:
-            logging.error(f"Error connecting to database: {e}")
-            return None
+        except sqlite3.Error as e:
+            raise Exception(f"Database connection failed: {e}")
 
-    def save_to_database(self, df: pd.DataFrame, table_name: str = 'default_table') -> None:
+    def save_to_database(self, df, table_name='transformed_data'):
         """
         Saves a DataFrame to the specified table in the database.
 
-        Args:
-            df (pd.DataFrame): The DataFrame to save.
-            table_name (str): The name of the table to save the data to. Defaults to 'default_table'.
+        :param df: DataFrame to be saved to the database.
+        :param table_name: Name of the table where the DataFrame will be saved.
         """
         try:
             df.to_sql(table_name, self.connection, if_exists='replace', index=False)
-            logging.info(f"Data saved to {table_name} in database.")
         except Exception as e:
-            logging.error(f"Error saving to database: {e}")
+            raise Exception(f"Saving data to database failed: {e}")
 
-    def load_from_database(self, table_name: str = 'default_table') -> pd.DataFrame:
+    def load_from_database(self, table_name='transformed_data'):
         """
-        Loads data from the specified table in the database.
+        Loads data from the specified table in the database into a DataFrame.
 
-        Args:
-            table_name (str): The name of the table to load data from. Defaults to 'default_table'.
-
-        Returns:
-            pd.DataFrame: A DataFrame containing the loaded data, or None if an error occurs.
+        :param table_name: Name of the table to load data from.
+        :return: DataFrame containing data from the specified table.
         """
         try:
-            data = pd.read_sql(f"SELECT * FROM {table_name}", self.connection)
-            logging.info(f"Data loaded from {table_name} table.")
-            return data
+            return pd.read_sql(f"SELECT * FROM {table_name}", self.connection)
         except Exception as e:
-            logging.error(f"Error loading from database: {e}")
-            return None
+            raise Exception(f"Loading data from database failed: {e}")
+
+    def save_predictions_to_database(self, predictions, table_name='predictions'):
+        """
+        Appends prediction results to the specified table in the database.
+
+        :param predictions: DataFrame containing prediction results.
+        :param table_name: Name of the table where predictions will be saved.
+        """
+        try:
+            predictions.to_sql(table_name, self.connection, if_exists='append', index=False)
+        except Exception as e:
+            raise Exception(f"Saving predictions to database failed: {e}")
